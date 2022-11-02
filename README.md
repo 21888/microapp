@@ -4,15 +4,14 @@
 ```go
 // 创建字节小程序实例
 app := microapp.New(microapp.Config{
-    AppId:     viper.GetString("APPID"),
-    AppSecret: viper.GetString("SECRET"),
+    AppId:     "APPID",
+    AppSecret: "SECRET",
 })
 ```
 
 ### 登录
-- code2Session
+- [code2Session](https://microapp.bytedance.com/docs/zh-CN/mini-app/develop/server/log-in/code-2-session)
 ```go
-// 官方文档地址 https://microapp.bytedance.com/docs/zh-CN/mini-app/develop/server/log-in/code-2-session
 // demo
 params := url.Values{}// import "net/url"
 params.Add("code", req.Code) // 这里虽然是用url拼接,但是post请求实现
