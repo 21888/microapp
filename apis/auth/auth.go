@@ -16,6 +16,7 @@
 package auth
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/url"
 
@@ -43,6 +44,16 @@ type ApiCode2SessionV2Res struct {
 }
 
 /*
+ApiCode2SessionRes 请求的数据
+*/
+type apiCode2SessionV2Req struct {
+	Appid         string `json:"appid"`
+	Secret        string `json:"secret"`
+	AnonymousCode string `json:"anonymous_code"`
+	Code          string `json:"code"`
+}
+
+/*
 code2Session
 
 通过login接口获取到登录凭证后，开发者可以通过服务器发送请求的方式获取 session_key 和 openId。
@@ -58,9 +69,19 @@ func Code2Session(ctx *microapp.MicroApp, params url.Values) (resp []byte, err e
 }
 
 func Code2SessionV2(ctx *microapp.MicroApp, params url.Values) (resp *ApiCode2SessionV2Res, err error) {
-	params.Add("appid", ctx.Config.AppId)
-	params.Add("secret", ctx.Config.AppSecret)
-	if get, err := ctx.Client.HTTPGet(apiCode2SessionV2 + "?" + params.Encode()); err != nil {
+	//params.Add("appid", ctx.Config.AppId)
+	//params.Add("secret", ctx.Config.AppSecret)
+	req := apiCode2SessionV2Req{
+		Appid:         ctx.Config.AppId,
+		Secret:        ctx.Config.AppSecret,
+		AnonymousCode: params.Get("anonymous_code"),
+		Code:          params.Get("code"),
+	}
+	marshal, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+	if get, err := ctx.Client.HTTPPost(apiCode2SessionV2, bytes.NewReader(marshal), "application/json"); err != nil {
 		return nil, err
 	} else {
 		apiCode2SessionV2Res := ApiCode2SessionV2Res{}
@@ -69,4 +90,5 @@ func Code2SessionV2(ctx *microapp.MicroApp, params url.Values) (resp *ApiCode2Se
 		}
 		return &apiCode2SessionV2Res, nil
 	}
+
 }
