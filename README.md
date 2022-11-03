@@ -12,10 +12,10 @@ app := microapp.New(microapp.Config{
 ### 登录
 - [code2Session](https://microapp.bytedance.com/docs/zh-CN/mini-app/develop/server/log-in/code-2-session)
 ```go
-res, err := auth.Code2SessionV2(app, auth.Code2SessionV2(ctx, auth.ApiCode2SessionV2Req{
+res, err := auth.Code2SessionV2(app, auth.ApiCode2SessionV2Req{
     AnonymousCode: "anonymous_code",
     Code:          "code",
-}))
+})
 if err != nil {
     return nil, err
 }
