@@ -47,8 +47,8 @@ type ApiCode2SessionV2Res struct {
 ApiCode2SessionV2Req 请求的数据
 */
 type ApiCode2SessionV2Req struct {
-	appid         string `json:"appid"`
-	secret        string `json:"secret"`
+	Appid         string `json:"appid"`
+	Secret        string `json:"secret"`
 	AnonymousCode string `json:"anonymous_code"`
 	Code          string `json:"code"`
 }
@@ -69,9 +69,10 @@ func Code2Session(ctx *microapp.MicroApp, params url.Values) (resp []byte, err e
 	return ctx.Client.HTTPGet(apiCode2Session + "?" + params.Encode())
 }
 
-func Code2SessionV2(ctx *microapp.MicroApp, params ApiCode2SessionV2Req) (resp *ApiCode2SessionV2Res, err error) {
-	params.appid = ctx.Config.AppId
-	params.secret = ctx.Config.AppSecret
+func Code2SessionV2(ctx *microapp.MicroApp, code string, anonymousCode string) (resp *ApiCode2SessionV2Res, err error) {
+	var params ApiCode2SessionV2Req
+	params.Appid = ctx.Config.AppId
+	params.Secret = ctx.Config.AppSecret
 	marshal, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
