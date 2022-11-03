@@ -12,10 +12,10 @@ app := microapp.New(microapp.Config{
 ### 登录
 - [code2Session](https://microapp.bytedance.com/docs/zh-CN/mini-app/develop/server/log-in/code-2-session)
 ```go
-// demo
-params := url.Values{}// import "net/url"
-params.Add("code", req.Code) // 这里虽然是用url拼接,但是post请求实现
-session, err := auth.Code2SessionV2(app, params)
+res, err := auth.Code2SessionV2(app, auth.Code2SessionV2(ctx, auth.ApiCode2SessionV2Req{
+    AnonymousCode: "anonymous_code",
+    Code:          "code",
+}))
 if err != nil {
     return nil, err
 }
@@ -26,5 +26,5 @@ if err != nil {
 
 
 ---
-借鉴自：[github.com/fastwego/microapp](https://github.com/21888/microapp)
+部分内容借鉴自：[github.com/fastwego/microapp](https://github.com/21888/microapp)
 

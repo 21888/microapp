@@ -44,11 +44,11 @@ type ApiCode2SessionV2Res struct {
 }
 
 /*
-ApiCode2SessionRes 请求的数据
+ApiCode2SessionV2Req 请求的数据
 */
-type apiCode2SessionV2Req struct {
-	Appid         string `json:"appid"`
-	Secret        string `json:"secret"`
+type ApiCode2SessionV2Req struct {
+	appid         string `json:"appid"`
+	secret        string `json:"secret"`
 	AnonymousCode string `json:"anonymous_code"`
 	Code          string `json:"code"`
 }
@@ -62,22 +62,17 @@ See: https://microapp.bytedance.com/docs/zh-CN/mini-app/develop/server/log-in/co
 
 GET https://developer.toutiao.com/api/apps/jscode2session
 */
+
 func Code2Session(ctx *microapp.MicroApp, params url.Values) (resp []byte, err error) {
 	params.Add("appid", ctx.Config.AppId)
 	params.Add("secret", ctx.Config.AppSecret)
 	return ctx.Client.HTTPGet(apiCode2Session + "?" + params.Encode())
 }
 
-func Code2SessionV2(ctx *microapp.MicroApp, params url.Values) (resp *ApiCode2SessionV2Res, err error) {
-	//params.Add("appid", ctx.Config.AppId)
-	//params.Add("secret", ctx.Config.AppSecret)
-	req := apiCode2SessionV2Req{
-		Appid:         ctx.Config.AppId,
-		Secret:        ctx.Config.AppSecret,
-		AnonymousCode: params.Get("anonymous_code"),
-		Code:          params.Get("code"),
-	}
-	marshal, err := json.Marshal(req)
+func Code2SessionV2(ctx *microapp.MicroApp, params ApiCode2SessionV2Req) (resp *ApiCode2SessionV2Res, err error) {
+	params.appid = ctx.Config.AppId
+	params.secret = ctx.Config.AppSecret
+	marshal, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
